@@ -1,4 +1,5 @@
 import os
+import sys
 from datetime import datetime
 from html import escape
 
@@ -251,6 +252,7 @@ async def decision(call: CallbackQuery, bot: Bot):
     await call.answer(result)
 
 
+
 async def on_startup(bot: Bot):
     await bot.set_webhook(
         f"{WEBHOOK_HOST}{WEBHOOK_PATH}",
@@ -264,20 +266,36 @@ async def on_shutdown(bot: Bot):
     await bot.delete_webhook()
 
 
-def main():
-    bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-    dp = Dispatcher()
-    dp.include_router(router)
-    dp.startup.register(on_startup)
-    dp.shutdown.register(on_shutdown)
+bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+dp = Dispatcher()
+dp.include_router(router)
+dp.startup.register(on_startup)
+dp.shutdown.register(on_shutdown)
 
-    app = web.Application()
-    SimpleRequestHandler(
-        dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET
-    ).register(app, path=WEBHOOK_PATH)
-    setup_application(app, dp, bot=bot)
-    web.run_app(app, host="0.0.0.0", port=PORT)
+app = web.Application()
+SimpleRequestHandler(
+    dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET
+).register(app, path=WEBHOOK_PATH)
+setup_application(app, dp, bot=bot)
 
 
 if __name__ == "__main__":
-    main()
+    os.execv(
+        sys.executable,
+        [
+            sys.executable,
+            "-m",
+            "gunicorn",
+            "main:app",
+            "-k",
+            "aiohttp.GunicornWebWorker",
+            "-b",
+            f"0.0.0.0:{PORT}",
+            "-w",
+            "1",
+            "--timeout",
+            "60",
+            "--access-logfile",
+            "-",
+        ],
+    )
