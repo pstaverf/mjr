@@ -19,7 +19,7 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_SECRET = "WEBHOOK_SECRET", "major-s9ejd-qUj6w-jEvO4-cK03Q"
 ADMIN_ID = ["6025818386"]
 CHAT_ID = -1004415936222
-PORT = ("PORT", 8080)
+PORT = int(os.environ.get("PORT", 8080))
 
 WELCOME_TEXT = (
     '<tg-emoji emoji-id="5251203410396458957">🛡</tg-emoji>'
