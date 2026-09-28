@@ -16,8 +16,8 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 BOT_TOKEN = "8314361205:AAFHRavPe3COjAlstChP84F9BH2db934k7c"
 WEBHOOK_HOST = "https://mjr-zg8b.onrender.com"
 WEBHOOK_PATH = "/webhook"
-WEBHOOK_SECRET = "WEBHOOK_SECRET", "major-s9ejd-qUj6w-jEvO4-cK03Q"
-ADMIN_ID = ["6025818386"]
+WEBHOOK_SECRET = "major-s9ejd-qUj6w-jEvO4-cK03Q"
+ADMIN_ID = 6025818386
 CHAT_ID = -1004415936222
 PORT = int(os.environ.get("PORT", 8080))
 
